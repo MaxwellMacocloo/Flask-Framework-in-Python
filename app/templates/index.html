@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+{% block title %}Dashboard{% endblock %}
+
+{% block content %}
+<h2>Class summary</h2>
+
+{# The summary dict is empty until the first student is added. #}
+{% if summary.students == 0 %}
+  <p class="empty">No students yet. <a href="{{ url_for('web.submit') }}">Add the first one.</a></p>
+{% else %}
+  <div class="cards">
+    <div class="card"><span class="label">Students</span><span class="value">{{ summary.students }}</span></div>
+    <div class="card"><span class="label">Class average</span><span class="value">{{ summary.class_average }}</span></div>
+    <div class="card"><span class="label">Highest</span><span class="value">{{ summary.highest }}</span></div>
+    <div class="card"><span class="label">Lowest</span><span class="value">{{ summary.lowest }}</span></div>
+    <div class="card pass"><span class="label">Passed</span><span class="value">{{ summary.passed }}</span></div>
+    <div class="card fail"><span class="label">Failed</span><span class="value">{{ summary.failed }}</span></div>
+  </div>
+
+  <h2>Students</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>#</th>
+        <th>Name</th>
+        {% for subject in subjects %}
+          <th>{{ subject.replace('_', ' ') | title }}</th>
+        {% endfor %}
+        <th>Average</th>
+        <th>Grade</th>
+        <th>Result</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for student in students %}
+        <tr>
+          <td>{{ student.id }}</td>
+          <td><a href="{{ url_for('web.result', student_id=student.id) }}">{{ student.name }}</a></td>
+          {% for subject in subjects %}
+            <td>{{ student.scores[subject] | round(1) }}</td>
+          {% endfor %}
+          <td><strong>{{ student.average }}</strong></td>
+          <td>{{ student.grade }}</td>
+          <td><span class="badge {{ student.result | lower }}">{{ student.result }}</span></td>
+          <td>
+            <form method="post" action="{{ url_for('web.delete', student_id=student.id) }}">
+              <button class="link-button" type="submit">delete</button>
+            </form>
+          </td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+{% endif %}
+{% endblock %}

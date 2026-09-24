@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% block title %}About{% endblock %}
+
+{% block content %}
+<h2>About this app</h2>
+<p>
+  A Flask application that records student marks, computes an average and a
+  letter grade, and exposes the same data over a JSON REST API.
+</p>
+
+<h3>Subjects</h3>
+<ol>
+  {% for subject in subjects %}
+    <li>{{ subject.replace('_', ' ') | title }}</li>
+  {% endfor %}
+</ol>
+
+<h3>Grade boundaries</h3>
+<table>
+  <thead><tr><th>Average</th><th>Grade</th></tr></thead>
+  <tbody>
+    <tr><td>80 and above</td><td>A</td></tr>
+    <tr><td>70 &ndash; 79</td><td>B</td></tr>
+    <tr><td>60 &ndash; 69</td><td>C</td></tr>
+    <tr><td>50 &ndash; 59</td><td>D</td></tr>
+    <tr><td>Below 50</td><td>F</td></tr>
+  </tbody>
+</table>
+{% endblock %}

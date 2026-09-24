@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% block title %}Add student{% endblock %}
+
+{% block content %}
+<h2>Enter scores</h2>
+
+{% if errors %}
+  <ul class="errors">
+    {% for error in errors %}<li>{{ error }}</li>{% endfor %}
+  </ul>
+{% endif %}
+
+<form method="post" action="{{ url_for('web.submit') }}" class="score-form">
+  <label for="name">Student name</label>
+  <input type="text" id="name" name="name" value="{{ submitted.get('name', '') }}" required>
+
+  {% for subject in subjects %}
+    <label for="{{ subject }}">{{ subject.replace('_', ' ') | title }}</label>
+    <input type="number" id="{{ subject }}" name="{{ subject }}"
+           min="0" max="100" step="0.1"
+           value="{{ submitted.get(subject, '0') }}">
+  {% endfor %}
+
+  <button type="submit">Calculate scorecard</button>
+</form>
+
+<p class="hint">Each subject is marked out of 100. All five are weighted equally.</p>
+{% endblock %}

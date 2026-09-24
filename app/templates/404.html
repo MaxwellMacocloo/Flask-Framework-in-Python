@@ -1,0 +1,8 @@
+{% extends "base.html" %}
+{% block title %}Not found{% endblock %}
+
+{% block content %}
+<h2>404 &mdash; not found</h2>
+<p>No page or student at that address.</p>
+<p><a href="{{ url_for('web.index') }}">Back to dashboard</a></p>
+{% endblock %}

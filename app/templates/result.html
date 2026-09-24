@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% block title %}{{ student.name }}{% endblock %}
+
+{% block content %}
+<h2>{{ student.name }}</h2>
+
+<div class="verdict {{ student.result | lower }}">
+  <span class="grade">{{ student.grade }}</span>
+  <div>
+    <strong>{{ student.result }}</strong>
+    <p>Average {{ student.average }} against a pass mark of {{ pass_mark }}.</p>
+  </div>
+</div>
+
+<table>
+  <thead><tr><th>Subject</th><th>Mark</th><th>Bar</th></tr></thead>
+  <tbody>
+    {% for subject, mark in student.scores.items() %}
+      <tr>
+        <td>{{ subject.replace('_', ' ') | title }}</td>
+        <td>{{ mark | round(1) }}</td>
+        <td>
+          {# Inline bar chart: width is the mark as a percentage. #}
+          <div class="bar-track">
+            <div class="bar-fill {{ 'pass' if mark >= pass_mark else 'fail' }}"
+                 style="width: {{ mark }}%"></div>
+          </div>
+        </td>
+      </tr>
+    {% endfor %}
+  </tbody>
+  <tfoot>
+    <tr><th>Total</th><th colspan="2">{{ student.total }} / {{ student.scores | length * 100 }}</th></tr>
+  </tfoot>
+</table>
+
+<p><a href="{{ url_for('web.index') }}">Back to dashboard</a></p>
+{% endblock %}
